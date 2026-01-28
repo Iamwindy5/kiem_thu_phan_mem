@@ -27,4 +27,25 @@ describe('Cart Test', () => {
         // Verify cart badge is gone or 0. usually it disappears in saucedemo
         cy.get('.shopping_cart_badge').should('not.exist');
     });
+
+    it('Should complete the checkout process', () => {
+    // 1. Thêm sản phẩm và đi đến giỏ hàng
+    cy.get('.inventory_item').first().find('.btn_inventory').click();
+    cy.get('.shopping_cart_link').click();
+    
+    // 2. Nhấn Checkout
+    cy.get('#checkout').click();
+
+    // 3. Điền thông tin theo yêu cầu đề bài
+    cy.get('#first-name').type('John');
+    cy.get('#last-name').type('Doe');
+    cy.get('#postal-code').type('12345');
+    
+    // 4. Nhấn Continue
+    cy.get('#continue').click();
+
+    // 5. Xác minh chuyển hướng đến trang xác nhận (/checkout-step-two.html)
+    cy.url().should('include', '/checkout-step-two.html');
+    cy.get('.title').should('contain', 'Checkout: Overview');
+  });
 });
